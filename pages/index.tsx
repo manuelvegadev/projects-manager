@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { IProjectStatusResponse } from "@/types/responses/git.types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { getAllProjects } from "@/utils/git-actions";
 
 interface IHomePage {
   projects: IProjectStatusResponse[];
@@ -64,15 +65,10 @@ export default function Home({ projects }: IHomePage) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const protocol = context.req.headers["x-forwarded-proto"] || "http";
-  const host = context.req.headers.host;
-  const pathname = "/api/git/get-all-projects";
-
-  const response = await fetch(`${protocol}://${host}${pathname}`);
-  const projects = await response.json();
+export const getServerSideProps: GetServerSideProps = async () => {
+  const projects: IProjectStatusResponse[] = await getAllProjects();
 
   return {
-    props: { projects },
+    props: { projects: JSON.parse(JSON.stringify(projects)) },
   };
 };

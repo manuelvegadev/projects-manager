@@ -1,8 +1,6 @@
 module.exports = {
   name: "[3002] Projects Manager",
-  script: "serve",
-  env: {
-    PM2_SERVE_PATH: "prod",
-    PM2_SERVE_PORT: 3002,
-  },
+  script: "node_modules/next/dist/bin/next",
+  args: "start -p 3002",
+  watch: true,
 };
