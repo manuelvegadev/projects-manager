@@ -181,3 +181,6 @@ dist
 # and uncomment the following lines
 # .pnp.*
 
+### Project config files
+
+config/projects.ts
