@@ -5,8 +5,8 @@ import { IProjectStatusResponse } from "@/types/responses/git.types";
 
 export async function getAllProjects() {
   const projectsStatus: IProjectStatusResponse[] = await Promise.all(
-    Object.keys(projects).map(async (projectName) => {
-      const project: IGitProjectConfig = projects[projectName];
+    Object.keys(projects).map(async (projectId) => {
+      const project: IGitProjectConfig = projects[projectId];
 
       const git: SimpleGit = initSimpleGit({
         baseDir: project.path,
@@ -17,6 +17,7 @@ export async function getAllProjects() {
       const status: StatusResult = await git.status();
 
       return {
+        id: projectId,
         name: project.name,
         path: project.path,
         status,
@@ -25,12 +26,6 @@ export async function getAllProjects() {
   );
 
   return projectsStatus;
-}
-
-export function initProjects() {
-  for (const projectName in Object.keys(projects)) {
-    initSimpleGitProject(projects[projectName]);
-  }
 }
 
 export function initSimpleGitProject(project: IGitProjectConfig) {

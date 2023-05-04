@@ -10,8 +10,14 @@ interface IHomePage {
 }
 
 export default function Home({ projects }: IHomePage) {
-  async function updateProject() {
-    // ...
+  async function updateProject(project: IProjectStatusResponse) {
+    const url = new URL("/api/git/deploy", window.location.origin);
+    url.searchParams.append("projectId", project.id);
+
+    const response = await fetch(url.toString());
+    const data = await response.json();
+
+    alert(JSON.stringify(data, null, 2));
   }
 
   return (
@@ -50,6 +56,9 @@ export default function Home({ projects }: IHomePage) {
                       <button
                         type="button"
                         className="btn btn-outline-primary text-nowrap"
+                        onClick={async () => {
+                          await updateProject(project);
+                        }}
                       >
                         🚀 Deploy
                       </button>

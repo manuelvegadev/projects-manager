@@ -17,6 +17,7 @@ export interface IGitUserConfig {
 export interface IGitProjectConfig {
   name: string;
   path: string;
+  buildCommand?: string;
   git: {
     user: IGitUserConfig;
   };
