@@ -1,9 +1,19 @@
-import { Header } from "@/modules/Header";
 import { GetServerSideProps } from "next";
 import { IProjectStatusResponse } from "@/types/responses/git.types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { getAllProjects } from "@/utils/git-actions";
+import {
+  Button,
+  Column,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@carbon/react";
 
 interface IHomePage {
   projects: IProjectStatusResponse[];
@@ -21,56 +31,50 @@ export default function Home({ projects }: IHomePage) {
   }
 
   return (
-    <>
-      <Header />
-      <div className="container py-4">
-        <div className="row">
-          <div className="col col-12">
-            <table className="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Path</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((project, projectIndex) => (
-                  <tr key={projectIndex}>
-                    <th scope="row">{project.name}</th>
-                    <td className={"text-mono"}>{project.path}</td>
-                    <td className={"text-mono"}>
-                      <div style={{ height: "10rem", overflow: "scroll" }}>
-                        <SyntaxHighlighter
-                          style={vscDarkPlus}
-                          language={"json"}
-                          showLineNumbers
-                          wrapLines={true}
-                        >
-                          {JSON.stringify(project.status, null, 2)}
-                        </SyntaxHighlighter>
-                      </div>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-outline-primary text-nowrap"
-                        onClick={async () => {
-                          await updateProject(project);
-                        }}
-                      >
-                        🚀 Deploy
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
+    <Grid>
+      <Column span={16}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeader scope="col">Name</TableHeader>
+              <TableHeader scope="col">Path</TableHeader>
+              <TableHeader scope="col">Status</TableHeader>
+              <TableHeader scope="col">Actions</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {projects.map((project, projectIndex) => (
+              <TableRow key={projectIndex}>
+                <TableHeader scope="row">{project.name}</TableHeader>
+                <TableCell>{project.path}</TableCell>
+                <TableCell>
+                  <div style={{ height: "10rem", overflow: "scroll" }}>
+                    <SyntaxHighlighter
+                      style={vscDarkPlus}
+                      language={"json"}
+                      showLineNumbers
+                      wrapLines={true}
+                    >
+                      {JSON.stringify(project.status, null, 2)}
+                    </SyntaxHighlighter>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      await updateProject(project);
+                    }}
+                  >
+                    🚀 Deploy
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Column>
+    </Grid>
   );
 }
 

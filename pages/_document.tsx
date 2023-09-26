@@ -5,9 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body>
-        <main style={{ paddingTop: "3.5rem" }}>
-          <Main />
-        </main>
+        <Main />
         <NextScript />
       </body>
     </Html>
