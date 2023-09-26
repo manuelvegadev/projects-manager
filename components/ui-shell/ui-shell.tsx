@@ -16,7 +16,7 @@ export const UIShell: React.FC = () => {
   }, [theme]);
 
   return (
-    <Header aria-label="TicketSOFT">
+    <Header aria-label="Projects Manager">
       <HeaderGlobalBar style={{ justifyContent: "flex-start" }}>
         <HeaderGlobalAction
           aria-label="Menú"

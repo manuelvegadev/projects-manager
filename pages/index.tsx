@@ -1,68 +1,33 @@
-import { GetServerSideProps } from "next";
-import { IProjectStatusResponse } from "@/types/responses/git.types";
-import { getAllProjects } from "@/utils/git-actions";
-import { Button, ClickableTile, Column, Grid } from "@carbon/react";
-// @ts-ignore
-import { Add } from "@carbon/icons-react";
+import { Column, Grid, ListItem, UnorderedList } from "@carbon/react";
 
-interface IHomePage {
-  projects: IProjectStatusResponse[];
-}
-
-export default function Home({ projects }: IHomePage) {
-  async function updateProject(project: IProjectStatusResponse) {
-    const url = new URL("/api/git/deploy", window.location.origin);
-    url.searchParams.append("projectId", project.id);
-
-    const response = await fetch(url.toString());
-    const data = await response.json();
-
-    alert(JSON.stringify(data, null, 2));
-  }
-
+export default function Home() {
   return (
     <>
       <Grid>
         <Column span={16}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <h1>Projects list</h1>
-            <Button renderIcon={Add} kind={"ghost"}>
-              Add project
-            </Button>
-          </div>
+          <span style={{ textAlign: "center" }}>
+            <h1>Projects Manager</h1>
+          </span>
         </Column>
-      </Grid>
-      <Grid>
-        {projects.map((project, projectIndex) => (
-          <Column
-            sm={{ span: 4 }}
-            md={{ span: 4 }}
-            lg={{ span: 4 }}
-            xlg={{ span: 4 }}
-            max={{ span: 4 }}
-            key={projectIndex}
-          >
-            <ClickableTile>
-              <h5>{project.name}</h5>
-              <code>{project.status.tracking}</code>
-            </ClickableTile>
-          </Column>
-        ))}
+        <Column span={16}>
+          <p>Manage your projects with ease.</p>
+          <p>
+            With Projects Manager you can easily manage your projects and deploy
+            them to your server.
+          </p>
+          <UnorderedList isExpressive>
+            <ListItem>
+              <strong>Manage</strong> your projects
+            </ListItem>
+            <ListItem>
+              <strong>Deploy</strong> your projects
+            </ListItem>
+            <ListItem>
+              <strong>Monitor</strong> your projects
+            </ListItem>
+          </UnorderedList>
+        </Column>
       </Grid>
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const projects: IProjectStatusResponse[] = await getAllProjects();
-
-  return {
-    props: { projects: JSON.parse(JSON.stringify(projects)) },
-  };
-};
