@@ -1,19 +1,9 @@
 import { GetServerSideProps } from "next";
 import { IProjectStatusResponse } from "@/types/responses/git.types";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { getAllProjects } from "@/utils/git-actions";
-import {
-  Button,
-  Column,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@carbon/react";
+import { Button, ClickableTile, Column, Grid } from "@carbon/react";
+// @ts-ignore
+import { Add } from "@carbon/icons-react";
 
 interface IHomePage {
   projects: IProjectStatusResponse[];
@@ -31,50 +21,41 @@ export default function Home({ projects }: IHomePage) {
   }
 
   return (
-    <Grid>
-      <Column span={16}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader scope="col">Name</TableHeader>
-              <TableHeader scope="col">Path</TableHeader>
-              <TableHeader scope="col">Status</TableHeader>
-              <TableHeader scope="col">Actions</TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {projects.map((project, projectIndex) => (
-              <TableRow key={projectIndex}>
-                <TableHeader scope="row">{project.name}</TableHeader>
-                <TableCell>{project.path}</TableCell>
-                <TableCell>
-                  <div style={{ height: "10rem", overflow: "scroll" }}>
-                    <SyntaxHighlighter
-                      style={vscDarkPlus}
-                      language={"json"}
-                      showLineNumbers
-                      wrapLines={true}
-                    >
-                      {JSON.stringify(project.status, null, 2)}
-                    </SyntaxHighlighter>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    type="button"
-                    onClick={async () => {
-                      await updateProject(project);
-                    }}
-                  >
-                    🚀 Deploy
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Column>
-    </Grid>
+    <>
+      <Grid>
+        <Column span={16}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h1>Projects list</h1>
+            <Button renderIcon={Add} kind={"ghost"}>
+              Add project
+            </Button>
+          </div>
+        </Column>
+      </Grid>
+      <Grid>
+        {projects.map((project, projectIndex) => (
+          <Column
+            sm={{ span: 4 }}
+            md={{ span: 4 }}
+            lg={{ span: 4 }}
+            xlg={{ span: 4 }}
+            max={{ span: 4 }}
+            key={projectIndex}
+          >
+            <ClickableTile>
+              <h5>{project.name}</h5>
+              <code>{project.status.tracking}</code>
+            </ClickableTile>
+          </Column>
+        ))}
+      </Grid>
+    </>
   );
 }
 
