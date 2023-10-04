@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen-db-models": "sequelize-auto -c sequelize-auto-options.json"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.27.0",
@@ -15,9 +16,11 @@
     "axios": "^1.5.0",
     "next": "13.5.3",
     "next-auth": "^4.23.1",
+    "pg": "^8.11.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-syntax-highlighter": "15.5.0",
+    "sequelize": "^6.33.0",
     "simple-git": "3.20.0"
   },
   "devDependencies": {
@@ -29,6 +32,7 @@
     "eslint-config-next": "13.5.3",
     "prettier": "3.0.3",
     "sass": "1.68.0",
+    "sequelize-auto": "^0.8.8",
     "typescript": "5.2.2"
   }
 }

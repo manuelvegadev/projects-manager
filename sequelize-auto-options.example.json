@@ -1,0 +1,21 @@
+{
+  "singularize": false,
+  "useDefine": false,
+  "directory": "./db/models",
+  "dialect": "postgres",
+  "host": "xxxxxxx.postgres.vercel-storage.com",
+  "password": "xxxxxxxxxx",
+  "database": "xxxxxxxxxx",
+  "username": "xxxxxxxxxx",
+  "lang": "ts",
+  "additional": {
+    "timestamps": false,
+    "underscored": true
+  },
+  "dialectOptions": {
+    "ssl": {
+      "require": true,
+      "rejectUnauthorized": false
+    }
+  }
+}
