@@ -4,24 +4,25 @@ import { getAllProjects } from "@/utils/git-actions";
 import { Button, ClickableTile, Column, Grid } from "@carbon/react";
 // @ts-ignore
 import { Add } from "@carbon/icons-react";
+import { UIShell } from "@/components";
 
 interface IHomePage {
   projects: IProjectStatusResponse[];
 }
 
 export default function Home({ projects }: IHomePage) {
-  async function updateProject(project: IProjectStatusResponse) {
-    const url = new URL("/api/git/deploy", window.location.origin);
-    url.searchParams.append("projectId", project.id);
-
-    const response = await fetch(url.toString());
-    const data = await response.json();
-
-    alert(JSON.stringify(data, null, 2));
-  }
+  // async function updateProject(project: IProjectStatusResponse) {
+  //   const url = new URL("/api/git/deploy", window.location.origin);
+  //   url.searchParams.append("projectId", project.id);
+  //
+  //   const response = await fetch(url.toString());
+  //   const data = await response.json();
+  //
+  //   alert(JSON.stringify(data, null, 2));
+  // }
 
   return (
-    <>
+    <UIShell>
       <Grid>
         <Column span={16}>
           <div
@@ -55,7 +56,7 @@ export default function Home({ projects }: IHomePage) {
           </Column>
         ))}
       </Grid>
-    </>
+    </UIShell>
   );
 }
 
