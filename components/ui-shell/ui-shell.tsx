@@ -59,7 +59,7 @@ export const UIShell: React.FC<UIShellProps> = ({ children }) => {
               }}
             />
             <img
-              src={data.user.image}
+              src={data.user.image || ""}
               alt=""
               style={{
                 height: "2rem",

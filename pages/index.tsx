@@ -19,14 +19,8 @@ const AppPage: NextPage = () => {
                 deploy them to your server.
               </p>
             </Stack>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "1rem",
-              }}
-            >
-              <TileLink href={"/servers"} pictogram={Receipt}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+              <TileLink href={"/invoicing"} pictogram={Receipt}>
                 Invoicing
               </TileLink>
               <TileLink href={"/servers"} pictogram={Servers}>

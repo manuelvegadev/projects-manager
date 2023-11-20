@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { UIShell } from "@/components";
-import { Column, Grid, Stack } from "@carbon/react";
 // @ts-ignore Until the package is updated
+import { Column, Grid, Stack } from "@carbon/react";
 
 const Page: NextPage = () => {
   return (
