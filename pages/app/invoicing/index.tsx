@@ -18,7 +18,7 @@ export default function InvoicingPage() {
         <Column span={16}>
           <Link
             onClick={() => {
-              push("/invoicing/invoices/default");
+              push("/app/invoicing/invoices/default");
             }}
           >
             Default invoice

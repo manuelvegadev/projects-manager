@@ -20,10 +20,10 @@ const AppPage: NextPage = () => {
               </p>
             </Stack>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-              <TileLink href={"/invoicing"} pictogram={Receipt}>
+              <TileLink href={"/app/invoicing"} pictogram={Receipt}>
                 Invoicing
               </TileLink>
-              <TileLink href={"/servers"} pictogram={Servers}>
+              <TileLink href={"/app/servers"} pictogram={Servers}>
                 Servers
               </TileLink>
             </div>
