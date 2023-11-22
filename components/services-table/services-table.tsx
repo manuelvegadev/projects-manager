@@ -1,5 +1,7 @@
 import React from "react";
 import { formatCurrency } from "@/utils";
+// @ts-ignore
+import * as colors from "@carbon/colors";
 
 type ServicesTableProps = {
   services: {
@@ -37,9 +39,9 @@ export const ServicesTable: React.FC<ServicesTableProps> = ({
             key={header}
             style={{
               paddingInline: "1rem",
-              backgroundColor: "var(--cds-layer-accent)",
+              backgroundColor: colors.blue[60],
               fontWeight: "bold",
-              color: "var(--cds-text-primary)",
+              color: "var(--cds-text-on-color)",
               display: "flex",
               alignItems: "center",
             }}
@@ -49,11 +51,14 @@ export const ServicesTable: React.FC<ServicesTableProps> = ({
         );
       })}
       {services.map((service, index) => {
+        const isEven = index % 2 === 0;
+
         const cellStyle: React.CSSProperties = {
           paddingInline: "1rem",
           display: "flex",
           alignItems: "center",
-          backgroundColor: "var(--cds-layer)",
+          backgroundColor: isEven ? colors.white : colors.blue[10],
+          fontSize: "var(--cds-body-01-font-size)",
           color: "var(--cds-text-secondary)",
         };
 
