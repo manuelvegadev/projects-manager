@@ -4,32 +4,48 @@ import type {
 } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
-import { Button, Column, Grid } from "@carbon/react";
+// @ts-ignore
+import { Button, Column, Content, Grid, Stack } from "@carbon/react";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { ArrowLeft } from "@carbon/icons-react";
+import { useRouter } from "next/navigation";
 
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { push } = useRouter();
+
   return (
-    <Grid>
-      {Object.values(providers).map((provider) => (
-        <Column span={16} key={provider.name}>
-          <Button onClick={() => signIn(provider.id)}>
-            Sign in with {provider.name}
-          </Button>
+    <Content>
+      <Grid>
+        <Column span={16}>
+          <Stack gap={5}>
+            <Button
+              kind={"secondary"}
+              renderIcon={ArrowLeft}
+              onClick={() => {
+                push("/");
+              }}
+            >
+              Back to home
+            </Button>
+            {Object.values(providers).map((provider) => (
+              <Button onClick={() => signIn(provider.id)} key={provider.name}>
+                Sign in with {provider.name}
+              </Button>
+            ))}
+          </Stack>
         </Column>
-      ))}
-    </Grid>
+      </Grid>
+    </Content>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, {});
+  const session = await getServerSession(context.req, context.res, authOptions);
 
-  // If the user is already logged in, redirect.
-  // Note: Make sure not to redirect to the same page
-  // To avoid an infinite loop!
   if (session) {
-    return { redirect: { destination: "/" } };
+    return { redirect: { destination: "/app" } };
   }
 
   const providers = await getProviders();

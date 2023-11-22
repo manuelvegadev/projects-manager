@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { loginCallback } from "@/lib";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -13,10 +13,12 @@ export default NextAuth({
     signIn: "/signin",
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (!account) return false;
       await loginCallback({ user, account });
       return true;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

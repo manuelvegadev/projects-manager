@@ -2,12 +2,21 @@ import { NextApiRequest, NextApiResponse } from "next";
 import projects from "@/config/projects";
 import { initSimpleGitProject } from "@/utils/git-actions";
 import { execSync } from "child_process";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
+    const session = await getServerSession(req, res, authOptions);
+
+    if (!session) {
+      res.status(401).json({ message: "You must be logged in." });
+      return;
+    }
+
     const projectId = req.query.projectId as string;
     const project = projects[projectId];
 
