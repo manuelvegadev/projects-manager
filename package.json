@@ -24,7 +24,9 @@
     "simple-git": "3.20.0"
   },
   "devDependencies": {
+    "@carbon/colors": "^11.20.0",
     "@types/node": "18.18.9",
+    "@types/pg": "^8.10.9",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "@types/react-syntax-highlighter": "15.5.7",
