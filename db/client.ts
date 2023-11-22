@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { initModels } from "@/db/models/init-models";
 import { initScopes } from "@/db/scopes";
+import pg from "pg";
 
 export const db = new Sequelize(
   process.env.POSTGRES_DATABASE as string,
@@ -9,6 +10,7 @@ export const db = new Sequelize(
   {
     host: process.env.POSTGRES_HOST as string,
     dialect: "postgres",
+    dialectModule: pg,
     dialectOptions: {
       ssl: {
         require: true,
