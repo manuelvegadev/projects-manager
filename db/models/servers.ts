@@ -13,6 +13,7 @@ export interface serversAttributes {
   ssh_key_pair_uuid?: string;
   ssh_password?: string;
   user_uuid: string;
+  slug: string;
 }
 
 export type serversPk = "uuid";
@@ -29,6 +30,7 @@ export class servers extends Model<serversAttributes, serversCreationAttributes>
   ssh_key_pair_uuid?: string;
   ssh_password?: string;
   user_uuid!: string;
+  slug!: string;
 
   // servers hasMany projects via server_uuid
   projects!: projects[];
@@ -96,6 +98,11 @@ export class servers extends Model<serversAttributes, serversCreationAttributes>
         model: 'users',
         key: 'uuid'
       }
+    },
+    slug: {
+      type: DataTypes.STRING(32),
+      allowNull: false,
+      unique: "servers_pk2"
     }
   }, {
     sequelize,
@@ -109,6 +116,13 @@ export class servers extends Model<serversAttributes, serversCreationAttributes>
         unique: true,
         fields: [
           { name: "uuid" },
+        ]
+      },
+      {
+        name: "servers_pk2",
+        unique: true,
+        fields: [
+          { name: "slug" },
         ]
       },
     ]

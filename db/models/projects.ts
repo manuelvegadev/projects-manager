@@ -9,6 +9,7 @@ export interface projectsAttributes {
   name: string;
   root_path: string;
   repository_uuid: string;
+  slug: string;
 }
 
 export type projectsPk = "uuid";
@@ -22,6 +23,7 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
   name!: string;
   root_path!: string;
   repository_uuid!: string;
+  slug!: string;
 
   // projects belongsTo repositories via repository_uuid
   repository_uu!: repositories;
@@ -65,6 +67,11 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
         model: 'repositories',
         key: 'uuid'
       }
+    },
+    slug: {
+      type: DataTypes.STRING(32),
+      allowNull: false,
+      unique: "projects_pk2"
     }
   }, {
     sequelize,
@@ -78,6 +85,13 @@ export class projects extends Model<projectsAttributes, projectsCreationAttribut
         unique: true,
         fields: [
           { name: "uuid" },
+        ]
+      },
+      {
+        name: "projects_pk2",
+        unique: true,
+        fields: [
+          { name: "slug" },
         ]
       },
     ]

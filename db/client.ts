@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import { initModels } from "@/db/models/init-models";
+import { initScopes } from "@/db/scopes";
 
 export const db = new Sequelize(
   process.env.POSTGRES_DATABASE as string,
@@ -17,4 +18,7 @@ export const db = new Sequelize(
   },
 );
 
-export const dbModels = initModels(db);
+const dbModels = initModels(db);
+initScopes(dbModels);
+
+export { dbModels };

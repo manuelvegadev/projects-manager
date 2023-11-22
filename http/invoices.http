@@ -1,0 +1,3 @@
+# @name Get invoices
+GET http://localhost:3000/api/invoicing/invoices
+Accept: application/json
