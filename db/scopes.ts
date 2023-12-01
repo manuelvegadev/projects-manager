@@ -1,13 +1,20 @@
 import { initModels } from "@/db/models/init-models";
+import { Op } from "sequelize";
 
 export const SCOPES = {
   INVOICE: {
     WITH_DETAILS: "withDetails",
+    NOT_DELETED: "notDeleted",
+    DELETED: "deleted",
+  },
+  BILLING_ENTITY: {
+    NOT_DELETED: "notDeleted",
   },
 };
 
+// TODO: Separate the scopes by model on different files
 export const initScopes = (models: ReturnType<typeof initModels>) => {
-  const { invoices } = models;
+  const { invoices, billing_entities } = models;
 
   invoices.addScope(SCOPES.INVOICE.WITH_DETAILS, {
     include: [
@@ -28,5 +35,32 @@ export const initScopes = (models: ReturnType<typeof initModels>) => {
         as: "bank_account",
       },
     ],
+  });
+
+  invoices.addScope(SCOPES.INVOICE.NOT_DELETED, {
+    // @ts-ignore - The column can be null
+    where: {
+      deleted_at: {
+        [Op.is]: null,
+      },
+    },
+  });
+
+  invoices.addScope(SCOPES.INVOICE.DELETED, {
+    // @ts-ignore - The column can be null
+    where: {
+      deleted_at: {
+        [Op.not]: null,
+      },
+    },
+  });
+
+  billing_entities.addScope(SCOPES.BILLING_ENTITY.NOT_DELETED, {
+    // @ts-ignore - The column can be null
+    where: {
+      deleted_at: {
+        [Op.is]: null,
+      },
+    },
   });
 };
