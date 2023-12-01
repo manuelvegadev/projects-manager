@@ -29,6 +29,12 @@ hr {
   margin: 0;
 }
 
-.cds--css-grid-column {
-  margin-block-end: 1rem;
+.cds--modal-content--overflow-indicator {
+  margin: 0 !important;
+  z-index: 1;
 }
+.cds--modal-content:focus {
+    outline: none;
+}
+
+@import '../components/form-builder/sub-components/combo-box/combo-box';
