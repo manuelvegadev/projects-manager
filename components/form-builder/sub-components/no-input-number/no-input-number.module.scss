@@ -1,0 +1,8 @@
+.no-input-number {
+  &__value {
+    height: 2.5rem;
+    font-size: 1.5em;
+    border-bottom: 0.0625rem solid var(--cds-border-strong);
+    padding-bottom: 0.125em;
+  }
+}

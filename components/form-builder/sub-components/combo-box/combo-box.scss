@@ -1,0 +1,12 @@
+.combo-box--wrap-text {
+  .cds--list-box {
+    &__menu-item {
+      height: initial;
+    }
+    &__menu-item__option {
+      height: initial;
+      text-overflow: initial;
+      white-space: initial;
+    }
+  }
+}
