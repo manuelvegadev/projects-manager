@@ -13,12 +13,12 @@ export interface billing_entitiesAttributes {
   postal_code: string;
   created_at: number;
   updated_at: number;
-  deteled_at?: number;
+  deleted_at?: number;
 }
 
 export type billing_entitiesPk = "uuid";
 export type billing_entitiesId = billing_entities[billing_entitiesPk];
-export type billing_entitiesOptionalAttributes = "uuid" | "created_at" | "updated_at" | "deteled_at";
+export type billing_entitiesOptionalAttributes = "uuid" | "created_at" | "updated_at" | "deleted_at";
 export type billing_entitiesCreationAttributes = Optional<billing_entitiesAttributes, billing_entitiesOptionalAttributes>;
 
 export class billing_entities extends Model<billing_entitiesAttributes, billing_entitiesCreationAttributes> implements billing_entitiesAttributes {
@@ -32,7 +32,7 @@ export class billing_entities extends Model<billing_entitiesAttributes, billing_
   postal_code!: string;
   created_at!: number;
   updated_at!: number;
-  deteled_at?: number;
+  deleted_at?: number;
 
   // billing_entities hasMany invoices via billed_by_entity_uuid
   invoices!: invoices[];
@@ -105,7 +105,7 @@ export class billing_entities extends Model<billing_entitiesAttributes, billing_
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('EXTRACT(epoch FROM now())')
     },
-    deteled_at: {
+    deleted_at: {
       type: DataTypes.BIGINT,
       allowNull: true
     }
