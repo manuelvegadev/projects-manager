@@ -11,9 +11,11 @@ import {
   Button,
   ComposedModal,
   FluidForm,
+  InlineNotification,
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Loading,
 } from "@carbon/react";
 import clsx from "clsx";
 import { ChildrenProps, FormBuilderProps } from "@/components/form-builder";
@@ -57,7 +59,13 @@ export const FormBuilder = <F extends FieldValues, R>({
   const {
     formState: { errors, isValid },
     getValues,
+    watch,
   } = formHook;
+
+  watch(() => {
+    setSuccess(false);
+    setError(false);
+  });
 
   const submitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -109,13 +117,24 @@ export const FormBuilder = <F extends FieldValues, R>({
 
   return isModal ? (
     <ComposedModal open={open} {...modalWrapperProps}>
+      <Loading
+        active={isSubmitting}
+        description={"Loading..."}
+        small={false}
+        withOverlay
+      />
       <ModalHeader
         label={modalLabel}
         title={modalTitle}
         {...modalHeaderProps}
       />
       <form style={{ display: "contents" }} onSubmit={submitHandler}>
-        <ModalBody hasForm hasScrollingContent {...modalBodyProps}>
+        <ModalBody
+          hasForm
+          hasScrollingContent
+          {...modalBodyProps}
+          style={{ paddingBlockEnd: "5rem" }}
+        >
           <div
             {...{
               modalFormContainerProps,
@@ -135,10 +154,26 @@ export const FormBuilder = <F extends FieldValues, R>({
             Cancel
           </Button>
           <Button kind="primary" type={"submit"} disabled={!isValid}>
-            {modalSubmitButtonText}
+            {isValid ? modalSubmitButtonText : "Fill required fields"}
           </Button>
         </ModalFooter>
       </form>
+      {success || error ? (
+        <InlineNotification
+          style={{
+            position: "absolute",
+            inset: "1rem",
+            top: "auto",
+            bottom: "5rem",
+            maxInlineSize: "calc(100% - 2rem)",
+            zIndex: 1,
+          }}
+          title={success ? "Done!" : "An error has occurred"}
+          subtitle={success ? successMessage : errorMessage}
+          kind={success ? "success" : "error"}
+          hideCloseButton={true}
+        />
+      ) : null}
     </ComposedModal>
   ) : (
     <FluidForm onSubmit={submitHandler}>{childrenValue}</FluidForm>
