@@ -71,13 +71,7 @@ export const UIShell: React.FC<UIShellProps> = ({ children }) => {
           </>
         ) : null}
       </Header>
-      <Content
-        style={{
-          paddingInline: "0",
-        }}
-      >
-        {children}
-      </Content>
+      <Content style={{ paddingInline: "0" }}>{children}</Content>
     </>
   );
 };
