@@ -4,3 +4,4 @@ export * from "./details-table";
 export * from "./services-table";
 export * from "./enumeration-table";
 export * from "./form-builder/form-builder";
+export * from "./meta-data/meta-data";
