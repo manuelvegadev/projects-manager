@@ -16,28 +16,25 @@ import {
   ModalFooter,
   ModalHeader,
   Loading,
+  // @ts-ignore TODO: Remove this when @carbon/react is updated
+  Layer,
 } from "@carbon/react";
 import clsx from "clsx";
 import { ChildrenProps, FormBuilderProps } from "@/components/form-builder";
 
-export const FormBuilder = <F extends FieldValues, R>({
-  children,
-  onSubmit,
-  onSuccess,
-  onError,
-  defaultValues,
-  isModal = false,
-  isModalOpen = false,
-  isModalFormFluid = true,
-  modalLabel,
-  modalTitle,
-  modalSubmitButtonText = "Save",
-  modalWrapperProps,
-  modalHeaderProps,
-  modalBodyProps,
-  modalFooterProps,
-  modalFormContainerProps,
-}: FormBuilderProps<F, R>) => {
+export const FormBuilder = <F extends FieldValues, R>(
+  props: FormBuilderProps<F, R>,
+) => {
+  const {
+    children,
+    onSubmit,
+    onSuccess,
+    onError,
+    defaultValues,
+    isModal,
+    isFluid = false,
+  } = props;
+
   //region React States
   const [isSubmitting, setIsSubmitting] =
     React.useState<ChildrenProps<F>["isSubmitting"]>(false);
@@ -49,12 +46,10 @@ export const FormBuilder = <F extends FieldValues, R>({
     React.useState<ChildrenProps<F>["successMessage"]>();
   const [errorMessage, setErrorMessage] =
     React.useState<ChildrenProps<F>["errorMessage"]>();
-
-  const [open, setOpen] = React.useState(isModalOpen);
   //endregion
 
   const formHook = useForm<F>({
-    ...(defaultValues ?? undefined),
+    ...defaultValues,
   });
   const {
     formState: { errors, isValid },
@@ -89,19 +84,25 @@ export const FormBuilder = <F extends FieldValues, R>({
     }
   };
 
-  const formFieldComponents: ChildrenProps<F>["formFieldComponents"] = {
+  const components: ChildrenProps<F>["components"] = {
     InputText: InputText,
     InputNumber: InputNumber,
     InputHidden: InputHidden,
     NoInputNumber: NoInputNumber,
     ComboBox: ComboBox,
+    Box: ({ children, ...props }) => (
+      <div
+        style={isFluid ? { padding: "1rem 0.8125rem" } : { padding: "1rem" }}
+        {...props}
+      >
+        {children}
+      </div>
+    ),
   };
 
-  Object.keys(formFieldComponents).forEach(
+  Object.keys(components).forEach(
     (key) =>
-      (formFieldComponents[
-        key as keyof typeof formFieldComponents
-      ].defaultProps = { formHook }),
+      (components[key as keyof typeof components].defaultProps = { formHook }),
   );
 
   const childrenValue = children({
@@ -111,12 +112,36 @@ export const FormBuilder = <F extends FieldValues, R>({
     isSubmitting,
     success,
     error,
-    formFieldComponents,
+    components,
     canSubmit: isValid,
   });
 
-  return isModal ? (
-    <ComposedModal open={open} {...modalWrapperProps}>
+  if (!isModal) {
+    return <FluidForm onSubmit={submitHandler}>{childrenValue}</FluidForm>;
+  }
+
+  const {
+    isModalOpen,
+    isModalFormFluid = true,
+    modalLabel,
+    modalTitle,
+    modalSubmitButtonText = "Save",
+    modalWrapperProps,
+    modalHeaderProps,
+    modalBodyProps,
+    modalFooterProps,
+    modalFormContainerProps,
+  } = props;
+
+  return (
+    <ComposedModal
+      open={isModalOpen.value}
+      {...modalWrapperProps}
+      onClose={(e) => {
+        e.preventDefault();
+        isModalOpen.set(false);
+      }}
+    >
       <Loading
         active={isSubmitting}
         description={"Loading..."}
@@ -132,12 +157,13 @@ export const FormBuilder = <F extends FieldValues, R>({
         <ModalBody
           hasForm
           hasScrollingContent
+          aria-label={modalTitle}
           {...modalBodyProps}
           style={{ paddingBlockEnd: "5rem" }}
         >
           <div
             {...{
-              modalFormContainerProps,
+              ...modalFormContainerProps,
               className: clsx({
                 ["cds--form"]: true,
                 ["cds--form--fluid"]: isModalFormFluid,
@@ -146,11 +172,11 @@ export const FormBuilder = <F extends FieldValues, R>({
               }),
             }}
           >
-            {childrenValue}
+            <Layer>{childrenValue}</Layer>
           </div>
         </ModalBody>
         <ModalFooter {...modalFooterProps}>
-          <Button kind="secondary" onClick={() => setOpen(false)}>
+          <Button kind="secondary" onClick={() => isModalOpen.set(false)}>
             Cancel
           </Button>
           <Button kind="primary" type={"submit"} disabled={!isValid}>
@@ -175,7 +201,5 @@ export const FormBuilder = <F extends FieldValues, R>({
         />
       ) : null}
     </ComposedModal>
-  ) : (
-    <FluidForm onSubmit={submitHandler}>{childrenValue}</FluidForm>
   );
 };

@@ -13,6 +13,7 @@ import {
   InputHidden,
   ComboBox,
 } from "./sub-components";
+import { StateHandler } from "@/utils";
 
 export type ChildrenProps<F extends FieldValues> = {
   formErrors: FieldErrors<F>;
@@ -22,12 +23,13 @@ export type ChildrenProps<F extends FieldValues> = {
   success: boolean;
   error: boolean;
   canSubmit: boolean;
-  formFieldComponents: {
+  components: {
     InputText: typeof InputText;
     InputNumber: typeof InputNumber;
     InputHidden: typeof InputHidden;
     NoInputNumber: typeof NoInputNumber;
     ComboBox: typeof ComboBox;
+    Box: React.FC<React.HTMLProps<HTMLDivElement>>;
   };
 };
 
@@ -36,23 +38,35 @@ export type FormBuilderProps<FormType extends FieldValues, ResponseType> = {
   onSuccess?: (values: FormType, response: ResponseType) => void;
   onError?: (values: FormType, reason: string | void) => void;
   defaultValues?: DefaultValues<FormType>;
+  isFluid?: boolean;
 
   children: (
     formBuilderChildrenProps: ChildrenProps<FormType>,
   ) => React.ReactNode;
-
-  isModal?: boolean;
-  isModalOpen?: boolean;
-  isModalFormFluid?: boolean;
-  modalLabel?: string;
-  modalTitle?: string;
-  modalSubmitButtonText?: string;
-  modalWrapperProps?: Omit<React.ComponentProps<typeof ComposedModal>, "open">;
-  modalHeaderProps?: Omit<
-    React.ComponentProps<typeof ModalHeader>,
-    "label" | "title"
-  >;
-  modalBodyProps?: Omit<React.ComponentProps<typeof ModalBody>, "hasForm">;
-  modalFooterProps?: React.ComponentProps<typeof ModalFooter>;
-  modalFormContainerProps?: React.HTMLAttributes<HTMLDivElement>;
-};
+} & (
+  | {
+      isModal: true;
+      isModalOpen: StateHandler<boolean>;
+      isModalFormFluid?: boolean;
+      modalLabel: string;
+      modalTitle: string;
+      modalSubmitButtonText?: string;
+      modalWrapperProps?: Omit<
+        React.ComponentProps<typeof ComposedModal>,
+        "open" | "onClose"
+      >;
+      modalHeaderProps?: Omit<
+        React.ComponentProps<typeof ModalHeader>,
+        "label" | "title"
+      >;
+      modalBodyProps?: Omit<
+        React.ComponentProps<typeof ModalBody>,
+        "hasForm" | "aria-label"
+      >;
+      modalFooterProps?: React.ComponentProps<typeof ModalFooter>;
+      modalFormContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+    }
+  | {
+      isModal: false;
+    }
+);
