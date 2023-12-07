@@ -75,3 +75,33 @@ export const numberToWords = (n: number) => {
   const result = translate(n);
   return result.trim();
 };
+
+export const formatDate = (date: Date | string | number) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(d);
+};
+
+export const formatDateTime = (date: Date | string | number) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+    weekday: "short",
+  }).format(d);
+};
+
+export const formatTime = (date: Date | string | number) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+  }).format(d);
+};
